@@ -40,8 +40,8 @@ public class NoteController {
     }
 
     @PutMapping
-    public ResponseEntity<Note> updateNote(@RequestBody Note note) {
-        return new ResponseEntity<>(service.updateNote(note), HttpStatus.OK);
+    public ResponseEntity<Note> updateNote(@RequestBody Note note, @PathVariable Long id) {
+        return new ResponseEntity<>(service.updateNote(id, note), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

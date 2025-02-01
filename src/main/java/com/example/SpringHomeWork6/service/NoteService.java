@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,17 +26,19 @@ public class NoteService {
         return repository.save(note);
     }
 
-    public Note updateNote(Note note) {
-        Note noteById = getNoteById(note.getId());
-
-        noteById.setTitle(note.getTitle());
-        noteById.setContent(note.getContent());
-
-        return repository.save(noteById);
+    public Note updateNote(Long id, Note noteDetails) {
+        Optional<Note> optionalNote = repository.findById(id);
+        if(optionalNote.isPresent()){
+            Note note = optionalNote.get();
+            note.setTitle(noteDetails.getTitle());
+            note.setContent(noteDetails.getContent());
+            return repository.save(note);
+        } else {
+            throw new IllegalArgumentException("Note not found with id: " + id);
+        }
     }
 
     public void deleteNote(Long id) {
-        Note noteById = getNoteById(id);
-        repository.delete(noteById);
+        repository.delete(id);
     }
 }
